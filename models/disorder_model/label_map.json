@@ -1,0 +1,17 @@
+{
+  "id2label": {
+    "0": "Depression",
+    "1": "Anxiety",
+    "2": "Stress",
+    "3": "Insomnia",
+    "4": "Panic Disorder"
+  },
+  "label2id": {
+    "Depression": 0,
+    "Anxiety": 1,
+    "Stress": 2,
+    "Insomnia": 3,
+    "Panic Disorder": 4
+  },
+  "num_labels": 5
+}

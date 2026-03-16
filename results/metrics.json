@@ -1,0 +1,135 @@
+{
+  "therapy_model": {
+    "model": "therapy_model",
+    "accuracy": 0.8801089918256131,
+    "precision": 0.9299840639602409,
+    "recall": 0.7060680388564644,
+    "f1_macro": 0.7839138608087834,
+    "confusion_matrix": [
+      [
+        503,
+        12,
+        1,
+        0,
+        0,
+        0,
+        0,
+        3
+      ],
+      [
+        3,
+        27,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        8,
+        0,
+        23,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        2,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        12,
+        0,
+        0,
+        0,
+        12,
+        0,
+        0,
+        0
+      ],
+      [
+        10,
+        0,
+        0,
+        0,
+        0,
+        28,
+        0,
+        0
+      ],
+      [
+        7,
+        0,
+        0,
+        0,
+        0,
+        0,
+        9,
+        0
+      ],
+      [
+        29,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        40
+      ]
+    ],
+    "labels": [
+      "Cognitive Behavioral Therapy",
+      "Dialectical Behavior Therapy",
+      "EMDR Therapy",
+      "Exposure Therapy",
+      "Group Therapy",
+      "Medication Management",
+      "Mindfulness-Based Therapy",
+      "Psychodynamic Therapy",
+      "Sleep Therapy"
+    ]
+  },
+  "ner_model": {
+    "model": "ner_model",
+    "precision": 0.02857142857142857,
+    "recall": 0.034482758620689655,
+    "f1": 0.03125,
+    "per_entity": {
+      "LIFESTYLE": {
+        "p": 0.0,
+        "r": 0.0,
+        "f": 0.0
+      },
+      "DISORDER": {
+        "p": 0.07692307692307693,
+        "r": 0.047619047619047616,
+        "f": 0.058823529411764705
+      },
+      "THERAPY": {
+        "p": 0.0,
+        "r": 0.0,
+        "f": 0.0
+      },
+      "SYMPTOM": {
+        "p": 0.0,
+        "r": 0.0,
+        "f": 0.0
+      },
+      "MEDICATION": {
+        "p": 0.0,
+        "r": 0.0,
+        "f": 0.0
+      }
+    }
+  }
+}
