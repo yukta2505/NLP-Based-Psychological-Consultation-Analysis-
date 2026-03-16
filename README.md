@@ -755,8 +755,8 @@ All therapy mappings are grounded in published clinical guidelines:
 ## 👥 Authors
 
 **Yukta Baid**
-- GitHub: [@yukta2505](https://github.com/yukta2505)
-- Email: yuktab2505@email.com
+- GitHub: [@yukta](https://github.com/yukta2505)
+- Email: baidyukta25@gmail.com
 
 ---
 
@@ -767,3 +767,4 @@ This project is licensed under the MIT License.
 ---
 
 > ⚠ **Disclaimer:** This system is a research and educational prototype. It is NOT a substitute for professional mental health diagnosis or treatment. All predictions should be reviewed by a qualified mental health professional. If you or someone you know is in crisis, please contact a mental health professional or emergency services immediately.
+
