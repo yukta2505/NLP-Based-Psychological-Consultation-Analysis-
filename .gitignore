@@ -1,0 +1,11 @@
+dataset/
+data/
+models/
+*.pkl
+*.pt
+*.h5
+*.zip
+*.csv
+*.json
+venv/
+__pycache__/
