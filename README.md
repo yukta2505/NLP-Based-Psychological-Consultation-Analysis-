@@ -9,7 +9,7 @@
 ![HuggingFace](https://img.shields.io/badge/HuggingFace-Transformers-yellow)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-green)
 ![React](https://img.shields.io/badge/React-18-blue)
-![License](https://img.shields.io/badge/License-MIT-lightgrey)
+<!-- ![License](https://img.shields.io/badge/License-MIT-lightgrey) -->
 
 </div>
 
