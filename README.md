@@ -144,15 +144,20 @@ neutral                          → neutral
 
 ---
 
-### Dataset 2 — Reddit Depression Dataset
+### Dataset 2 — Disorder Classification (Real Datasets — Free & Public)
+| Disorder | Source | Platform | Approx. Size |
+|----------|--------|----------|--------------|
+| **Depression**      | Reddit Depression Dataset | Kaggle | 7,731 |
+| **Anxiety**         | CSSRS / Anxiety Reddit | HuggingFace | ~5,000 |
+| **Stress**          | Dreaddit stress dataset | HuggingFace | 3,553 |
+| **Insomnia**        | Sleep/Insomnia Reddit posts | HuggingFace | ~2,000 |
+| **Panic Disorder**  | Subset of Anxiety dataset (panic keyword filtering) | HuggingFace | ~1,000 |
+
 | Property | Detail |
 |----------|--------|
-| **Source** | [Kaggle — Depression Reddit Cleaned](https://www.kaggle.com/datasets/infamouscoder/depression-reddit-cleaned) |
-| **Size** | 7,731 Reddit posts |
-| **Labels** | Binary (is_depression: 0/1) |
-| **Used For** | Disorder classification (Depression class) |
-| **Processing** | Sampled 3,000 depression posts + 4,800 synthetic samples for other disorders |
-| **Citation** | Shen et al. Reddit Depression Dataset |
+| **Used For** | Training the disorder classifier (Depression, Anxiety, Stress, Insomnia, Panic Disorder) |
+| **Processing** | Combined real patient-written posts into a balanced training set; filtered/noise reduced; labeled by disorder subtype |
+| **Notes** | These datasets replace earlier synthetic samples and provide broader real-world coverage across common mental health presentations |
 
 ---
 
