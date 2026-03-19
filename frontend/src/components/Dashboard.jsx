@@ -229,21 +229,114 @@ export default function Dashboard({ setPage }) {
         </div>
 
         <div className="card">
-          <h2>Datasets</h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {[
-              { name: "GoEmotions",        rows: "211,225", label: "28 emotion labels",    color: "var(--green)",  use: "Emotion Detection" },
-              { name: "Reddit Depression", rows: "7,731",   label: "Binary depression",    color: "var(--accent)", use: "Disorder Classification" },
-              { name: "NCBI Disease",      rows: "Train+Dev+Test", label: "BIO disease tags", color: "var(--purple)", use: "NER Training" },
-            ].map(d => (
-              <div key={d.name} style={{ padding: 14, background: "var(--bg-deep)", borderRadius: "var(--radius)", border: `1px solid ${d.color}30` }}>
-                <div style={{ fontWeight: 600, color: d.color, marginBottom: 4 }}>{d.name}</div>
-                <div style={{ fontSize: 20, fontFamily: "var(--font-display)", marginBottom: 4 }}>{d.rows}</div>
-                <div style={{ fontSize: 11, color: "var(--text-secondary)" }}>{d.label} · {d.use}</div>
-              </div>
-            ))}
+  <h2>Datasets</h2>
+  <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+    {/* GoEmotions */}
+    <div
+      style={{
+        padding: 14,
+        background: "var(--bg-deep)",
+        borderRadius: "var(--radius)",
+        border: "1px solid var(--green)30",
+      }}
+    >
+      <div style={{ fontWeight: 600, color: "var(--green)", marginBottom: 4 }}>
+        GoEmotions
+      </div>
+      <div
+        style={{
+          fontSize: 20,
+          fontFamily: "var(--font-display)",
+          marginBottom: 4,
+        }}
+      >
+        211,225
+      </div>
+      <div style={{ fontSize: 11, color: "var(--text-secondary)" }}>
+        28 emotion labels · Emotion Detection
+      </div>
+    </div>
+
+    {/* Disorder Classification Group */}
+    <div
+      style={{
+        padding: 14,
+        background: "var(--bg-deep)",
+        borderRadius: "var(--radius)",
+        border: "1px solid var(--accent)30",
+      }}
+    >
+      <div style={{ fontWeight: 600, color: "var(--accent)", marginBottom: 4 }}>
+        Disorder Classification
+      </div>
+      <div
+        style={{
+          fontSize: 20,
+          fontFamily: "var(--font-display)",
+          marginBottom: 8,
+        }}
+      >
+        5 datasets
+      </div>
+      <div style={{ fontSize: 11, color: "var(--text-secondary)", marginBottom: 10 }}>
+        Depression, Anxiety, Stress, Insomnia, Panic Disorder
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        {[
+          { name: "Reddit Depression Dataset", size: "7,731", source: "Kaggle" },
+          { name: "CSSRS / Anxiety Reddit", size: "~5,000", source: "HuggingFace" },
+          { name: "Dreaddit Stress Dataset", size: "3,553", source: "HuggingFace" },
+          { name: "Sleep / Insomnia Reddit Posts", size: "~2,000", source: "HuggingFace" },
+          { name: "Panic Disorder Subset", size: "~1,000", source: "Filtered Anxiety Data" },
+        ].map((d) => (
+          <div
+            key={d.name}
+            style={{
+              padding: "10px 12px",
+              background: "rgba(255,255,255,0.02)",
+              border: "1px solid rgba(255,255,255,0.06)",
+              borderRadius: 10,
+            }}
+          >
+            <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text-primary)" }}>
+              {d.name}
+            </div>
+            <div style={{ fontSize: 11, color: "var(--text-secondary)", marginTop: 2 }}>
+              {d.size} samples · {d.source}
+            </div>
           </div>
-        </div>
+        ))}
+      </div>
+    </div>
+
+    {/* NCBI */}
+    <div
+      style={{
+        padding: 14,
+        background: "var(--bg-deep)",
+        borderRadius: "var(--radius)",
+        border: "1px solid var(--purple)30",
+      }}
+    >
+      <div style={{ fontWeight: 600, color: "var(--purple)", marginBottom: 4 }}>
+        NCBI Disease
+      </div>
+      <div
+        style={{
+          fontSize: 20,
+          fontFamily: "var(--font-display)",
+          marginBottom: 4,
+        }}
+      >
+        Train + Dev + Test
+      </div>
+      <div style={{ fontSize: 11, color: "var(--text-secondary)" }}>
+        BIO disease tags · NER Training
+      </div>
+    </div>
+  </div>
+</div>
       </div>
     </div>
   );
