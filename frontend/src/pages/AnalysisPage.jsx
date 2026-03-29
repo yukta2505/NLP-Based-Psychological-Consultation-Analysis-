@@ -76,7 +76,7 @@ function SeverityBar({ score, label }) {
 
 function Section({ title, icon, color = "var(--accent)", children }) {
   return (
-    <div style={{ background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden", marginBottom: 16 }}>
+    <div className="report-section" style={{ background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden", marginBottom: 16 }}>
       <div style={{ padding: "12px 20px", borderBottom: "1px solid var(--border-soft)", background: `linear-gradient(90deg, ${color}15, transparent)`, display: "flex", alignItems: "center", gap: 10, borderLeft: `3px solid ${color}` }}>
         {icon && <span style={{ fontSize: 18 }}>{icon}</span>}
         <span style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.2, color }}>{title}</span>
@@ -125,14 +125,62 @@ function ReportView({ result }) {
     High:   `${firstName}, you are experiencing significant distress. Professional support is strongly recommended.`,
   }[result.severity_label] || "";
 
-  const handlePrint = () => {
-    const el = document.getElementById("psych-report-content");
-    if (!el) return;
+  const pdfStyles = `
+    :root{
+      --bg-deep:#0a0d12;
+      --bg-panel:#111620;
+      --bg-card:#161c28;
+      --bg-hover:#1e2638;
+      --border:#252e42;
+      --border-soft:#1d2535;
+      --text-primary:#e8edf5;
+      --text-secondary:#7a8aaa;
+      --text-muted:#4a5572;
+      --accent:#4f8eff;
+      --accent-soft:rgba(79,142,255,0.12);
+      --green:#3ecf8e;
+      --green-soft:rgba(62,207,142,0.12);
+      --yellow:#f5a623;
+      --yellow-soft:rgba(245,166,35,0.12);
+      --red:#ff5c5c;
+      --red-soft:rgba(255,92,92,0.12);
+      --font-display:Georgia, 'Times New Roman', serif;
+      --font-body:'Segoe UI', Arial, sans-serif;
+      --font-mono:ui-monospace, Consolas, monospace;
+    }
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-body);}
+    .no-print{display:none !important;}
+    .pdf-shell{max-width:980px;margin:0 auto;padding:22px;}
+    .report-section{break-inside:avoid;page-break-inside:avoid;}
+    .pdf-mindmap-page{break-before:page;page-break-before:always;margin-top:0;}
+    .pdf-mindmap-title{font-family:var(--font-display);font-size:20px;margin:0 0 6px;color:var(--text-primary);}
+    .pdf-mindmap-sub{margin:0 0 14px;color:var(--text-secondary);font-size:12.5px;line-height:1.6;}
+    @media print{
+      @page{size:A4;margin:12mm;}
+      *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+      .pdf-shell{max-width:unset;padding:0;}
+    }
+  `;
+
+  const handleDownloadPdf = () => {
+    const reportEl = document.getElementById("psych-report-content");
+    if (!reportEl) return;
+    const mindEl = document.getElementById("psych-report-mindmap-page");
+
     const win = window.open("", "_blank");
-    win.document.write(`<!DOCTYPE html><html><head><title>Report - ${result.patient_name}</title>
-      <style>body{font-family:'Segoe UI',Arial,sans-serif;background:#fff;color:#1a1a2e;margin:0;padding:20px;}
-      *{box-sizing:border-box;}.no-print{display:none!important;}</style></head>
-      <body>${el.innerHTML}<script>window.onload=()=>{window.print();window.close();}<\/script></body></html>`);
+    if (!win) return;
+
+    const title = `Report - ${result.patient_name || "patient"}`;
+    const reportHtml = reportEl.outerHTML;
+    const mindHtml = mindEl ? mindEl.outerHTML : "";
+
+    win.document.write(
+      `<!doctype html><html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+      <title>${title}</title><style>${pdfStyles}</style></head>
+      <body><div class="pdf-shell">${reportHtml}${mindHtml}</div>
+      <script>window.onload=()=>{setTimeout(()=>window.print(),250);}</script></body></html>`
+    );
     win.document.close();
   };
 
@@ -160,8 +208,8 @@ function ReportView({ result }) {
             </div>
           </div>
           <div style={{ display: "flex", gap: 8 }}>
-            <button onClick={handlePrint} style={{ background: "var(--accent-soft)", border: "1px solid var(--accent)", color: "var(--accent)", borderRadius: 8, padding: "8px 14px", cursor: "pointer", fontSize: 12, fontFamily: "inherit", fontWeight: 500 }}>
-              🖨 Print / PDF
+            <button title="Opens print dialog â€” choose â€˜Save as PDFâ€™" onClick={handleDownloadPdf} style={{ background: "var(--accent)", border: "1px solid rgba(255,255,255,0.14)", color: "#0b1322", borderRadius: 10, padding: "9px 14px", cursor: "pointer", fontSize: 12, fontFamily: "inherit", fontWeight: 800, boxShadow: "0 12px 26px rgba(79,142,255,0.22)" }}>
+              ⬇ Download PDF
             </button>
             <button onClick={handleTxt} style={{ background: "transparent", border: "1px solid var(--border)", color: "var(--text-secondary)", borderRadius: 8, padding: "8px 14px", cursor: "pointer", fontSize: 12, fontFamily: "inherit" }}>
               ⬇ TXT
@@ -282,6 +330,17 @@ function ReportView({ result }) {
           </div>
         </div>
 
+      </div>
+
+      {/* Offscreen (export-only) mind map page for PDF */}
+      <div style={{ position: "fixed", left: -10000, top: 0, width: 760 }} aria-hidden="true">
+        <div id="psych-report-mindmap-page" className="pdf-mindmap-page">
+          <h2 className="pdf-mindmap-title">Mind Map</h2>
+          <p className="pdf-mindmap-sub">
+            Visual relationships between patient, symptoms, disorder, therapy, medications and lifestyle.
+          </p>
+          <MindMap data={result.mind_map} variant="export" exportViewport={{ w: 760, h: 980 }} />
+        </div>
       </div>
     </div>
   );
