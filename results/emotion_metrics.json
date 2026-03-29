@@ -1,0 +1,21 @@
+{
+  "emotion_model": {
+    "model": "emotion_model (ensemble)",
+    "accuracy": 0.7025,
+    "precision_macro": 0.70,
+    "recall_macro": 0.73,
+    "f1_macro": 0.7106,
+    "precision": 0.70,
+    "recall": 0.73,
+    "f1": 0.7106,
+    "labels": ["fear", "sadness", "anger", "joy", "nervousness", "neutral"],
+    "per_class": {
+      "fear": {"precision": 0.78, "recall": 0.83, "f1": 0.81, "support": 400},
+      "sadness": {"precision": 0.70, "recall": 0.69, "f1": 0.69, "support": 500},
+      "anger": {"precision": 0.69, "recall": 0.71, "f1": 0.70, "support": 500},
+      "joy": {"precision": 0.69, "recall": 0.81, "f1": 0.74, "support": 500},
+      "nervousness": {"precision": 0.73, "recall": 0.90, "f1": 0.80, "support": 300},
+      "neutral": {"precision": 0.64, "recall": 0.43, "f1": 0.51, "support": 600}
+    }
+  }
+}

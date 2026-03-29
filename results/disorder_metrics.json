@@ -1,0 +1,34 @@
+{
+  "disorder_model": {
+    "model": "disorder_model (best checkpoint)",
+    "accuracy": 0.835,
+    "precision": 0.838,
+    "recall": 0.835,
+    "f1_macro": 0.835,
+    "best_val_f1": 0.8359,
+    "labels": [
+      "depression",
+      "anxiety",
+      "bipolar",
+      "ocd",
+      "ptsd",
+      "adhd",
+      "addiction",
+      "insomnia",
+      "panic_disorder",
+      "stress"
+    ],
+    "per_class": {
+      "depression": { "precision": 0.61, "recall": 0.721, "f1": 0.661, "support": 1000 },
+      "anxiety": { "precision": 0.657, "recall": 0.662, "f1": 0.659, "support": 1000 },
+      "bipolar": { "precision": 0.725, "recall": 0.686, "f1": 0.705, "support": 1000 },
+      "ocd": { "precision": 1.0, "recall": 1.0, "f1": 1.0, "support": 1000 },
+      "ptsd": { "precision": 0.787, "recall": 0.73, "f1": 0.757, "support": 1000 },
+      "adhd": { "precision": 0.746, "recall": 0.721, "f1": 0.733, "support": 1000 },
+      "addiction": { "precision": 0.855, "recall": 0.826, "f1": 0.84, "support": 1000 },
+      "insomnia": { "precision": 1.0, "recall": 1.0, "f1": 1.0, "support": 1000 },
+      "panic_disorder": { "precision": 0.997, "recall": 1.0, "f1": 0.999, "support": 1000 },
+      "stress": { "precision": 0.999, "recall": 1.0, "f1": 1.0, "support": 1000 }
+    }
+  }
+} 
