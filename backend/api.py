@@ -197,6 +197,16 @@ def get_metrics():
         }
         loaded_files.append("ner_metrics.json")
 
+    emotion = _load_json(results_dir / "emotion_metrics.json")
+    if isinstance(emotion, dict) and isinstance(emotion.get("emotion_model"), dict):
+        merged["emotion_model"] = emotion["emotion_model"]
+        loaded_files.append("emotion_metrics.json")
+
+    therapy = _load_json(results_dir / "therapy_metrics.json")
+    if isinstance(therapy, dict) and isinstance(therapy.get("therapy_model"), dict):
+        merged["therapy_model"] = therapy["therapy_model"]
+        loaded_files.append("therapy_metrics.json")
+
     if merged:
         merged["_meta"] = {"loaded_files": loaded_files}
         return merged

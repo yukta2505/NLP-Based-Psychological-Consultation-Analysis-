@@ -9,3 +9,4 @@ models/
 *.json
 venv/
 __pycache__/
+build_disorder_dataset.py

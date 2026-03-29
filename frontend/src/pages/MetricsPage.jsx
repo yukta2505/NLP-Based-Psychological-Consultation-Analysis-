@@ -166,7 +166,7 @@ export default function MetricsPage() {
               {[
                 { label: "Train / Val / Test Split", value: "70% / 15% / 15%" },
                 { label: "Emotion Base Model",       value: "DistilBERT-base-uncased" },
-                { label: "Disorder Base Model",      value: "DistilBERT-base-uncased" },
+                { label: "Disorder Base Model",      value: "RoBERTa-base" },
                 { label: "NER Framework",            value: "spaCy + NCBI Corpus" },
                 { label: "Therapy Model",            value: "XGBoost (n=300 trees)" },
                 { label: "Evaluation",               value: "Accuracy, P, R, F1, CM" },

@@ -56,7 +56,7 @@ Given a consultation note (typed text or PDF), the system:
 9. **Tracks** patient progress across multiple sessions
 
 ### Scope
-- 5 disorder classes: Depression, Anxiety, Stress, Insomnia, Panic Disorder
+- 10 disorder classes: Depression, Anxiety, Bipolar, OCD, PTSD, ADHD, Addiction, Insomnia, Panic Disorder, Stress
 - 6 emotion classes: Fear, Sadness, Anger, Joy, Nervousness, Neutral
 - 9 therapy classes: CBT, DBT, EMDR, Exposure, Sleep, Mindfulness, Psychodynamic, Group, Medication Management
 - 5 NER entity types: SYMPTOM, DISORDER, THERAPY, MEDICATION, LIFESTYLE
@@ -149,13 +149,18 @@ neutral                          → neutral
 |----------|--------|----------|--------------|
 | **Depression**      | Reddit Depression Dataset | Kaggle | 7,731 |
 | **Anxiety**         | CSSRS / Anxiety Reddit | HuggingFace | ~5,000 |
-| **Stress**          | Dreaddit stress dataset | HuggingFace | 3,553 |
+| **Bipolar**         | Reddit Bipolar Dataset | HuggingFace | ~3,000 |
+| **OCD**             | Reddit OCD Dataset | HuggingFace | ~2,500 |
+| **PTSD**            | Reddit PTSD Dataset | HuggingFace | ~2,000 |
+| **ADHD**            | Reddit ADHD Dataset | HuggingFace | ~3,500 |
+| **Addiction**       | Reddit Addiction Dataset | HuggingFace | ~2,800 |
+| **Stress**          | Dreaddit stress dataset + Reddit | HuggingFace | 3,553 + ~4,000 |
 | **Insomnia**        | Sleep/Insomnia Reddit posts | HuggingFace | ~2,000 |
 | **Panic Disorder**  | Subset of Anxiety dataset (panic keyword filtering) | HuggingFace | ~1,000 |
 
 | Property | Detail |
 |----------|--------|
-| **Used For** | Training the disorder classifier (Depression, Anxiety, Stress, Insomnia, Panic Disorder) |
+| **Used For** | Training the disorder classifier (10 disorders: Depression, Anxiety, Bipolar, OCD, PTSD, ADHD, Addiction, Insomnia, Panic Disorder, Stress) |
 | **Processing** | Combined real patient-written posts into a balanced training set; filtered/noise reduced; labeled by disorder subtype |
 | **Notes** | These datasets replace earlier synthetic samples and provide broader real-world coverage across common mental health presentations |
 
@@ -233,8 +238,8 @@ text = re.sub(r"\s+", " ", text).strip()
 - **Hybrid approach:** ML model for unknown patterns + clinical keyword fallback for consultation text
 
 ### Step 5: Disorder Classification
-- **Model:** DistilBERT fine-tuned on Reddit depression + synthetic data
-- **Task:** Multi-class classification (5 disorders)
+- **Model:** RoBERTa fine-tuned on real Reddit mental health posts
+- **Task:** Multi-class classification (10 disorders)
 - **Ensemble:** ML prediction (80%+ confidence) + rule-based keyword voting
 - **Output:** Disorder name + confidence percentage
 
@@ -284,15 +289,15 @@ Class weights : Computed to handle imbalance
 Saved to      : models/emotion_model/
 ```
 
-### Disorder Model (DistilBERT)
+### Disorder Model (RoBERTa)
 ```
-Base model    : distilbert-base-uncased
+Base model    : roberta-base
 Task          : Multi-class classification
-Labels        : 5 (Depression, Anxiety, Stress, Insomnia, Panic Disorder)
-Training data : ~6,200 samples (Reddit + synthetic)
-Epochs        : 3
+Labels        : 10 (Depression, Anxiety, Bipolar, OCD, PTSD, ADHD, Addiction, Insomnia, Panic Disorder, Stress)
+Training data : ~10,000 samples (real Reddit posts, balanced)
+Epochs        : 10
 Batch size    : 32
-Max length    : 128 tokens
+Max length    : 160 tokens
 Optimizer     : AdamW (lr=2e-5, weight_decay=0.01)
 Class weights : Balanced
 Saved to      : models/disorder_model/
@@ -303,9 +308,9 @@ Saved to      : models/disorder_model/
 Base model    : spacy blank English
 Task          : BIO named entity recognition
 Entities      : SYMPTOM, DISORDER, THERAPY, MEDICATION, LIFESTYLE
-Training data : NCBI corpus (793 abstracts) + 1,200 synthetic examples
-Iterations    : 40
-Dropout       : 0.35
+Training data : NCBI corpus (793 abstracts) + 1,200 synthetic psychological examples
+Iterations    : 45
+Dropout       : 0.22
 Saved to      : models/ner_model/
 ```
 
@@ -354,27 +359,23 @@ neutral      : 0.43  ⚠
 
 | Metric | Score |
 |--------|-------|
-| Accuracy | 91.0% |
-| Precision (macro) | 90.0% |
-| Recall (macro) | 89.0% |
-| **F1 Macro** | **89.5%** |
+| Accuracy | 83.5% |
+| Precision (macro) | 83.8% |
+| Recall (macro) | 83.5% |
+| **F1 Macro** | **83.5%** |
 
-**Per-class performance:**
+**Per-class F1 (selected):**
 ```
-Depression      : F1 = 0.95  ✅  (3,000 real Reddit samples)
-Anxiety         : F1 = 0.88  ✅
-Stress          : F1 = 0.87  ✅
-Insomnia        : F1 = 0.90  ✅
-Panic Disorder  : F1 = 0.88  ✅
-```
-**Confusion Matrix:**
-```
-                 Dep   Anx   Str   Ins   Pan
-Depression  [   450     0     0     0     0 ]
-Anxiety     [     0   120     0     0     0 ]
-Stress      [     0     0   120     0     0 ]
-Insomnia    [     0     0     0   120     0 ]
-Panic       [     0     0     0     0   120 ]
+Depression      : 0.661
+Anxiety         : 0.659
+Bipolar         : 0.705
+OCD             : 1.000
+PTSD            : 0.757
+ADHD            : 0.733
+Addiction       : 0.840
+Insomnia        : 1.000
+Panic Disorder  : 0.999
+Stress          : 1.000
 ```
 
 ---
@@ -510,7 +511,7 @@ Live statistics from database:
 | Model | Base | Parameters |
 |-------|------|-----------|
 | Emotion | DistilBERT-base-uncased | 66M |
-| Disorder | DistilBERT-base-uncased | 66M |
+| Disorder | RoBERTa-base | 125M |
 | NER | spaCy blank-en | ~2M |
 | Therapy | XGBoost | ~50K trees |
 
@@ -535,7 +536,7 @@ nlp-psychological-consultation/
 │
 ├── models/
 │   ├── emotion_model/      # DistilBERT weights + tokenizer
-│   ├── disorder_model/     # DistilBERT weights + label_map.json
+│   ├── disorder_model/     # RoBERTa weights + tokenizer
 │   ├── ner_model/          # spaCy model directory
 │   └── therapy_model/      # XGBoost .pkl files + meta.json
 │
@@ -662,7 +663,7 @@ npm run dev
   "patient_age": 20,
   "patient_gender": "Female",
   "consultation_date": "18-02-2026",
-  "predicted_disorder": "Performance Anxiety",
+  "predicted_disorder": "Anxiety",
   "disorder_confidence": 95.0,
   "severity_label": "Medium",
   "severity_score": 1.4,
@@ -719,7 +720,7 @@ All therapy mappings are grounded in published clinical guidelines:
 
 4. **English only** — All models are trained on English text only.
 
-5. **5 disorder scope** — Only 5 mental health conditions are classified. Complex comorbidities, personality disorders, bipolar disorder, schizophrenia are out of scope.
+5. **10 disorder scope** — Only 10 mental health conditions are classified. Complex comorbidities, personality disorders, schizophrenia are out of scope.
 
 6. **Therapy dataset imbalance** — CBT dominates the training data (72%) which may bias recommendations toward CBT for ambiguous cases.
 
