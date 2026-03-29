@@ -162,10 +162,45 @@ def health():
 @app.get("/metrics")
 def get_metrics():
     """Return stored model evaluation metrics."""
-    metrics_path = os.path.join(os.path.dirname(__file__), "../results/metrics.json")
-    if os.path.exists(metrics_path):
-        with open(metrics_path) as f:
-            return json.load(f)
+    results_dir = Path(os.path.dirname(__file__)) / "../results"
+
+    def _load_json(p: Path):
+        try:
+            if not p.exists():
+                return None
+            with p.open("r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            return None
+
+    merged = {}
+    loaded_files = []
+
+    base = _load_json(results_dir / "metrics.json")
+    if isinstance(base, dict):
+        merged.update(base)
+        loaded_files.append("metrics.json")
+
+    disorder = _load_json(results_dir / "disorder_metrics.json")
+    if isinstance(disorder, dict) and isinstance(disorder.get("disorder_model"), dict):
+        merged["disorder_model"] = disorder["disorder_model"]
+        loaded_files.append("disorder_metrics.json")
+
+    ner = _load_json(results_dir / "ner_metrics.json")
+    if isinstance(ner, dict) and ("ents_p" in ner or "ents_f" in ner or "ents_per_type" in ner):
+        merged["ner_model"] = {
+            "model": "ner_model (spaCy)",
+            "precision": ner.get("ents_p"),
+            "recall": ner.get("ents_r"),
+            "f1": ner.get("ents_f"),
+            "per_class": ner.get("ents_per_type") or {},
+        }
+        loaded_files.append("ner_metrics.json")
+
+    if merged:
+        merged["_meta"] = {"loaded_files": loaded_files}
+        return merged
+
     return {"message": "No metrics found. Train models first."}
 
 
