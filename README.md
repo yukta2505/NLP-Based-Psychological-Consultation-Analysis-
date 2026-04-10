@@ -93,7 +93,7 @@ Given a consultation note (typed text or PDF), the system:
     │              │  │              │  │              │
     │ DistilBERT   │  │ DistilBERT   │  │   spaCy NER  │
     │ GoEmotions   │  │ Fine-tuned   │  │ NCBI Corpus  │
-    │ 6 emotions   │  │ 5 disorders  │  │ 5 entities   │
+    │ 6 emotions   │  │ 10 disorders  │  │ 5 entities   │
     └──────┬───────┘  └──────┬───────┘  └──────┬───────┘
            │                 │                  │
            └────────┬────────┘                  │
