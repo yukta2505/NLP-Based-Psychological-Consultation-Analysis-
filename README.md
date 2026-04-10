@@ -337,21 +337,21 @@ Saved to      : models/therapy_model/
 
 | Metric | Score |
 |--------|-------|
-| Accuracy | 57.0% |
-| Precision (macro) | 54.9% |
-| Recall (macro) | 58.6% |
-| **F1 Macro** | **55.9%** |
+| Accuracy | 70.3% |
+| Precision (macro) | 70.0% |
+| Recall (macro) | 73.0% |
+| **F1 Macro** | **71.1%** |
 
 **Per-class F1:**
 ```
-joy          : 0.69  ✅
-fear         : 0.53  ✅
-anger        : 0.57  ✅
-sadness      : 0.61  ✅
-nervousness  : 0.53  ✅
-neutral      : 0.43  ⚠
+joy          : 0.74  ✅
+fear         : 0.81  ✅
+anger        : 0.70  ✅
+sadness      : 0.69  ✅
+nervousness  : 0.80  ✅
+neutral      : 0.51  ⚠
 ```
-> Note: Emotion classification on social media text is inherently challenging. State-of-the-art models achieve ~60-65% macro F1 on GoEmotions. Our 55.9% is within the expected range for a 6-class problem with class imbalance.
+> Note: Emotion classification on clinical text is challenging. These scores are from the current stored evaluation output (`results/emotion_metrics.json`).
 
 ---
 
@@ -384,18 +384,20 @@ Stress          : 1.000
 
 | Metric | Score |
 |--------|-------|
-| Precision | 84.0% |
-| Recall | 81.0% |
-| **F1** | **82.5%** |
+| Precision | 100.0% |
+| Recall | 100.0% |
+| **F1** | **100.0%** |
 
 **Per-entity F1:**
 ```
-SYMPTOM    : 0.85  ✅
-DISORDER   : 0.83  ✅
-THERAPY    : 0.88  ✅
-MEDICATION : 0.79  ⚠  (limited medication diversity in training data)
-LIFESTYLE  : 0.76  ⚠  (lifestyle terms contextually ambiguous)
+SYMPTOM    : 1.00
+DISORDER   : 1.00
+THERAPY    : 1.00
+MEDICATION : 1.00
+LIFESTYLE  : 1.00
 ```
+
+> Note: `results/metrics.json` currently contains a separate `ner_model` metric set with much lower scores (P=4.35%, R=4.76%, F1=4.55%). Treat NER performance as needing validation on a single consistent test set.
 
 ---
 
@@ -528,7 +530,7 @@ nlp-psychological-consultation/
 │
 ├── training/
 │   ├── train_emotion_model.py      # DistilBERT emotion training
-│   ├── train_disorder_model.py     # DistilBERT disorder training
+│   ├── train_disorder_model.py     # RoBERTa disorder training
 │   ├── train_ner_model.py          # spaCy NER training
 │   ├── train_therapy_model.py      # XGBoost therapy training
 │   ├── build_therapy_dataset.py    # Real dataset builder
@@ -714,7 +716,7 @@ All therapy mappings are grounded in published clinical guidelines:
 
 1. **Not a diagnostic tool** — This system is a research prototype. It should NOT be used as a substitute for professional clinical assessment or diagnosis.
 
-2. **Emotion model accuracy (56% F1)** — Emotion classification on clinical text is challenging. The model was trained on social media text (GoEmotions) and may not perfectly generalise to formal consultation language.
+2. **Emotion model performance (71.1% macro F1)** — Emotion classification on clinical text is challenging. The model was trained on social media text (GoEmotions) and may not perfectly generalise to formal consultation language.
 
 3. **Disorder model overfitting** — The disorder model shows high accuracy on the test set due to limited real-world disorder diversity. Performance on genuinely unseen clinical notes may be lower.
 
